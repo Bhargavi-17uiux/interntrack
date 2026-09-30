@@ -1,62 +1,88 @@
 ﻿# InternTrack — Internship Application Tracker
 
-> A full-stack web application to track internship applications, built with Next.js, Express, TypeScript, and PostgreSQL.
+A beginner full-stack portfolio project for tracking internship applications.
+Built with Next.js, Express, TypeScript, and PostgreSQL.
 
 ---
 
-## Architecture
+## What It Does
+
+InternTrack lets you manage all your internship applications in one place:
+
+- **Add** applications with company, role, location, date, status, and notes
+- **Edit** or **delete** any application
+- **Search** by company or role, **filter** by status, **sort** by date
+- **Dashboard** shows live stats: total, applied, interviews, offers, rejected, withdrawn
+
+---
+
+## Tech Stack
+
+| Layer | Technology | Why |
+|-------|-----------|-----|
+| Frontend | Next.js 14 (App Router) | File-based routing, React server components |
+| UI | React 18 + TypeScript | Component model, type safety |
+| Styling | CSS Modules | Scoped styles, no naming conflicts |
+| Backend | Express.js + Node.js | Minimal REST API framework |
+| ORM | Prisma | Type-safe database queries |
+| Database | PostgreSQL | Reliable relational database |
+| Validation | express-validator | Server-side input validation |
+
+---
+
+## How Data Flows
 
 ```
-Browser → Next.js (port 3000) → fetch() → Express (port 5000) → Prisma → PostgreSQL
+Browser
+  └─► Next.js page (React component)
+        └─► lib/api.ts  (fetch call)
+              └─► Express route  (port 5000)
+                    └─► Controller  (reads request, sends response)
+                          └─► Service  (business logic)
+                                └─► Prisma ORM
+                                      └─► PostgreSQL database
 ```
 
-Detailed layers:
-- **Frontend**: Next.js App Router pages → React components → lib/api.ts (fetch)
-- **Backend**: Express Routes → Controllers → Services → Prisma ORM
-- **Database**: PostgreSQL with `applications` table
+Every create, update, and delete goes through the REST API.
+The frontend never touches the database directly.
 
 ---
 
 ## Project Structure
 
-```
-fullstack-1st-project/
+fullstack 1st project/
 ├── backend/
-│   ├── prisma/schema.prisma      # Database schema
-│   ├── src/
-│   │   ├── controllers/          # HTTP handlers
-│   │   ├── routes/               # URL → controller map
-│   │   ├── services/             # Business logic + DB queries
-│   │   ├── db.ts                 # Prisma singleton
-│   │   ├── types.ts              # TypeScript interfaces
-│   │   ├── validation.ts         # Input validation
-│   │   └── index.ts              # Entry point
-│   ├── .env.example
-│   └── package.json
+│   ├── prisma/schema.prisma      # Database schema (Application model)
+│   └── src/
+│       ├── index.ts              # Express app entry point
+│       ├── db.ts                 # Prisma client singleton
+│       ├── types.ts              # TypeScript interfaces / DTOs
+│       ├── validation.ts         # express-validator rules
+│       ├── routes/               # URL → controller mapping
+│       ├── controllers/          # HTTP request/response handlers
+│       └── services/             # Business logic + Prisma queries
 │
 ├── frontend/
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── page.tsx                    # Dashboard (/)
-│   │   │   ├── layout.tsx                  # Root layout + sidebar
-│   │   │   └── applications/
-│   │   │       ├── page.tsx                # List (/applications)
-│   │   │       ├── new/page.tsx            # Add form
-│   │   │       └── [id]/
-│   │   │           ├── page.tsx            # Detail view
-│   │   │           └── edit/page.tsx       # Edit form
-│   │   ├── components/
-│   │   │   ├── Sidebar/
-│   │   │   ├── StatCard/
-│   │   │   ├── StatusBadge/
-│   │   │   ├── ApplicationTable/
-│   │   │   ├── ApplicationForm/
-│   │   │   └── SearchFilters/
-│   │   └── lib/
-│   │       ├── api.ts            # All backend API calls
-│   │       └── utils.ts          # Helpers, constants
-│   ├── .env.example
-│   └── package.json
+│   └── src/
+│       ├── app/                  # Next.js App Router pages
+│       │   ├── page.tsx                    # Dashboard  /
+│       │   ├── layout.tsx                  # Root layout (sidebar)
+│       │   └── applications/
+│       │       ├── page.tsx                # List        /applications
+│       │       ├── new/page.tsx            # Add form    /applications/new
+│       │       └── [id]/
+│       │           ├── page.tsx            # Detail      /applications/:id
+│       │           └── edit/page.tsx       # Edit form   /applications/:id/edit
+│       ├── components/           # Reusable UI components
+│       │   ├── Sidebar/
+│       │   ├── StatCard/
+│       │   ├── StatusBadge/
+│       │   ├── ApplicationTable/
+│       │   ├── ApplicationForm/
+│       │   └── SearchFilters/
+│       └── lib/
+│           ├── api.ts            # All fetch calls to the backend
+│           └── utils.ts          # Date formatting, status constants
 │
 ├── .gitignore
 ├── README.md
@@ -65,113 +91,34 @@ fullstack-1st-project/
 
 ---
 
-## Setup Instructions
-
-### Prerequisites
-- Node.js v18+  https://nodejs.org
-- PostgreSQL v14+  https://www.postgresql.org/download/
-- Git  https://git-scm.com
-
-### 1. Create the database
-
-Open pgAdmin or psql:
-
-```sql
-CREATE DATABASE internship_tracker;
-```
-
-### 2. Configure backend
-
-```bash
-cd backend
-copy .env.example .env
-```
-
-Edit `backend/.env`:
-
-```env
-DATABASE_URL="postgresql://postgres:yourpassword@localhost:5432/internship_tracker"
-PORT=5000
-FRONTEND_URL=http://localhost:3000
-```
-
-### 3. Install backend dependencies
-
-```bash
-cd backend
-npm install
-```
-
-### 4. Run database migrations
-
-```bash
-npm run db:generate
-npm run db:migrate
-```
-
-Type `initial_setup` when prompted for a migration name.
-
-### 5. Start the backend
-
-```bash
-npm run dev
-```
-
-Visit http://localhost:5000/health — should return `{"success":true}`.
-
-### 6. Configure frontend
-
-```bash
-cd ../frontend
-copy .env.example .env.local
-```
-
-Default value works: `NEXT_PUBLIC_API_URL=http://localhost:5000`
-
-### 7. Install frontend dependencies
-
-```bash
-npm install
-```
-
-### 8. Start the frontend
-
-```bash
-npm run dev
-```
-
-Open http://localhost:3000
-
----
-
 ## API Endpoints
 
 | Method | Path | Description |
 |--------|------|-------------|
-| GET | /health | Health check |
-| GET | /api/stats | Dashboard stats |
-| GET | /api/applications | List all (supports ?search=, ?status=, ?sortBy=, ?order=) |
-| GET | /api/applications/:id | Single application |
-| POST | /api/applications | Create application |
-| PUT | /api/applications/:id | Update application |
-| DELETE | /api/applications/:id | Delete application |
+| GET | `/health` | Server health check |
+| GET | `/api/stats` | Dashboard statistics |
+| GET | `/api/applications` | List all (see query params below) |
+| GET | `/api/applications/:id` | Get single application |
+| POST | `/api/applications` | Create application |
+| PUT | `/api/applications/:id` | Update application |
+| DELETE | `/api/applications/:id` | Delete application |
 
-### Status Values
-APPLIED, INTERVIEW, OFFER, REJECTED, WITHDRAWN
+**Query parameters for GET /api/applications**
 
-### Example — Create Application
+| Param | Example | Description |
+|-------|---------|-------------|
+| `search` | `?search=Google` | Search company name or role |
+| `status` | `?status=INTERVIEW` | Filter by status |
+| `sortBy` | `?sortBy=applicationDate` | Sort field |
+| `order` | `?order=desc` | `asc` or `desc` |
 
-```bash
-curl -X POST http://localhost:5000/api/applications \
-  -H "Content-Type: application/json" \
-  -d "{\"companyName\":\"Google\",\"jobRole\":\"SWE Intern\",\"applicationDate\":\"2024-03-15\",\"status\":\"APPLIED\"}"
-```
+**Status values:** `APPLIED` · `INTERVIEW` · `OFFER` · `REJECTED` · `WITHDRAWN`
 
 ---
 
-## Database Schema (Prisma)
+## Database Schema
 
-```
+```prisma
 model Application {
   id              String            @id @default(cuid())
   companyName     String
@@ -186,70 +133,163 @@ model Application {
 }
 ```
 
-### Migration Commands
+---
 
-```bash
-npm run db:migrate         # Dev: create + apply migration
-npm run db:migrate:deploy  # Production: apply existing migrations
-npm run db:studio          # Open visual DB browser
+## Setup — Windows PowerShell
+
+### Prerequisites
+
+- [Node.js v18+](https://nodejs.org)
+- [PostgreSQL v14+](https://www.postgresql.org/download/)
+- [Git](https://git-scm.com)
+
+---
+
+### Step 1 — Create the database
+
+Open **pgAdmin** or the **psql** shell and run:
+
+```sql
+CREATE DATABASE internship_tracker;
+```
+
+---
+
+### Step 2 — Backend setup
+
+Open a terminal in the project root:
+
+```powershell
+cd backend
+Copy-Item .env.example .env
+```
+
+Open `backend\.env` and fill in your credentials:
+
+```env
+DATABASE_URL="postgresql://postgres:yourpassword@localhost:5432/internship_tracker"
+PORT=5000
+FRONTEND_URL=http://localhost:3000
+NODE_ENV=development
+```
+
+> Replace `yourpassword` with your actual PostgreSQL password. Never commit this file.
+
+---
+
+### Step 3 — Install backend dependencies
+
+```powershell
+npm install
+```
+
+---
+
+### Step 4 — Generate Prisma client and run migration
+
+```powershell
+npm run db:generate
+npm run db:migrate
+```
+
+When prompted for a migration name, type `initial_setup` and press Enter.
+This creates the `applications` table in PostgreSQL.
+
+---
+
+### Step 5 — Start the backend server
+
+```powershell
+npm run dev
+```
+
+You should see:
+```
+✅ Backend server running at http://localhost:5000
+```
+
+Verify it works: open http://localhost:5000/health in your browser.
+
+---
+
+### Step 6 — Frontend setup (open a NEW terminal window)
+
+Navigate to the frontend folder from the project root:
+
+```powershell
+cd frontend
+Copy-Item .env.example .env.local
+```
+
+The default `.env.local` already has the correct value:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000
+```
+
+---
+
+### Step 7 — Install frontend dependencies
+
+```powershell
+npm install
+```
+
+---
+
+### Step 8 — Start the frontend
+
+```powershell
+npm run dev
+```
+
+Open http://localhost:3000 in your browser.
+
+---
+
+## Useful Scripts
+
+### Backend (run inside `backend/`)
+
+```powershell
+npm run dev              # Start dev server with hot reload
+npm run build            # Compile TypeScript to JavaScript
+npm run db:generate      # Regenerate Prisma client after schema changes
+npm run db:migrate       # Create and apply a new migration
+npm run db:migrate:deploy  # Apply migrations in production
+npm run db:studio        # Open Prisma Studio (visual database browser)
+npm run lint             # Run ESLint
+```
+
+### Frontend (run inside `frontend/`)
+
+```powershell
+npm run dev    # Start Next.js dev server
+npm run build  # Build for production
+npm run lint   # Run ESLint
 ```
 
 ---
 
 ## Interview Preparation
 
-### What does this project do?
-InternTrack helps students track internship applications — add, edit, delete applications and see statistics on a dashboard.
+### What does this project demonstrate?
 
-### Technologies and Why
+- Building a **REST API** with Express and Node.js
+- Defining a **database schema** and running **migrations** with Prisma
+- Creating a **Next.js frontend** with the App Router
+- **Connecting frontend to backend** using the fetch API
+- **TypeScript** across the full stack for type safety
+- **Input validation** on the server to protect the database
+- Organizing code using the **Controller → Service** pattern
 
-| Tech | Reason |
-|------|--------|
-| Next.js 14 | Industry-standard React framework with App Router |
-| React 18 | Most popular UI library |
-| TypeScript | Static types catch bugs at compile time |
-| Express.js | Minimal Node.js framework for REST APIs |
-| PostgreSQL | Reliable relational database |
-| Prisma ORM | Type-safe DB queries with auto-generated TypeScript types |
-| CSS Modules | Scoped styles, no class conflicts |
+### Key design decisions
 
-### How Frontend Talks to Backend
-1. User action → React component state update
-2. Component calls function in `lib/api.ts`
-3. That function calls `fetch(BACKEND_URL/api/...)` with JSON
-4. Express receives request → validates → service → Prisma query
-5. Prisma returns data → Express sends JSON response
-6. React updates state → UI re-renders
-
-### How Data is Stored
-- PostgreSQL stores all application records in the `applications` table
-- Prisma ORM provides a type-safe API to query/mutate data
-- Every create/update/delete goes through the REST API (no direct DB access from frontend)
-
-### Key Design Decisions
-1. **Service layer** — keeps controllers thin, business logic reusable
-2. **Centralized API client** — all fetch calls in one file, easy to update
-3. **Server-side validation** — express-validator ensures bad data never reaches the DB
-4. **Prisma singleton** — prevents connection leaks on dev server hot reloads
-5. **CSS Modules** — scoped styles without a CSS-in-JS library
-
----
-
-## Scripts
-
-### Backend
-```bash
-npm run dev              # Dev server (hot reload)
-npm run build            # Compile TypeScript
-npm run db:generate      # Generate Prisma client
-npm run db:migrate       # Run migrations (dev)
-npm run db:studio        # Visual DB browser
-npm run lint             # ESLint
-```
-
-### Frontend
-```bash
-npm run dev    # Dev server
-npm run build  # Production build
-npm run lint   # ESLint
-```
+| Decision | Reason |
+|----------|--------|
+| Service layer | Keeps controllers thin; business logic is reusable and testable |
+| Centralized `lib/api.ts` | One place for all fetch calls — easy to update if URL changes |
+| Prisma singleton (`db.ts`) | Prevents connection leaks on hot reloads in development |
+| Server-side validation | Never trust client input; catch bad data before it reaches the DB |
+| CSS Modules | Scoped styles per component without a CSS-in-JS library |
+| `NEXT_PUBLIC_` prefix | Required for Next.js to expose env vars to the browser bundle |
