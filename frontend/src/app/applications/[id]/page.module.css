@@ -1,0 +1,177 @@
+/* /applications/[id]/page.module.css */
+
+.page {
+  padding: var(--space-8);
+  max-width: 900px;
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: var(--space-4);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-6);
+  font-size: var(--font-size-sm);
+}
+
+.breadcrumbLink {
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.breadcrumbLink:hover {
+  color: var(--color-accent-primary);
+}
+
+.breadcrumbSep {
+  color: var(--color-text-muted);
+}
+
+.breadcrumbCurrent {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+/* Header */
+.detailHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-8);
+  flex-wrap: wrap;
+}
+
+.companyBlock {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.companyAvatar {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-secondary));
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  color: white;
+  box-shadow: var(--shadow-glow);
+  flex-shrink: 0;
+}
+
+.companyName {
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-1);
+}
+
+.jobRole {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-base);
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+/* Details Grid */
+.detailGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.detailCard {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+}
+
+.cardTitle {
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.fieldList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.field {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.fieldLabel {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  min-width: 160px;
+  flex-shrink: 0;
+}
+
+.fieldValue {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+.externalLink {
+  color: var(--color-accent-primary);
+  font-weight: 500;
+}
+
+.externalLink:hover {
+  color: var(--color-accent-secondary);
+}
+
+.jobDescription {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: var(--space-4);
+  }
+
+  .detailHeader {
+    flex-direction: column;
+  }
+
+  .field {
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .fieldLabel {
+    min-width: unset;
+  }
+}

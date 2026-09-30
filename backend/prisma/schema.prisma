@@ -1,0 +1,37 @@
+// Prisma Schema for Internship Application Tracker
+// This file defines the database structure
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Enum for application status
+// Enums restrict the value to only these allowed options
+enum ApplicationStatus {
+  APPLIED
+  INTERVIEW
+  OFFER
+  REJECTED
+  WITHDRAWN
+}
+
+// The main Application model — maps to a "applications" table in PostgreSQL
+model Application {
+  id              String            @id @default(cuid())  // Unique ID, auto-generated
+  companyName     String                                   // Company being applied to
+  jobRole         String                                   // Position/role title
+  jobDescription  String?                                  // Optional notes or JD
+  applicationDate DateTime          @default(now())        // When you applied
+  status          ApplicationStatus @default(APPLIED)      // Current status
+  jobPostingUrl   String?                                  // Optional URL to job posting
+  location        String?                                  // Job location (city, remote, etc.)
+  createdAt       DateTime          @default(now())        // Record creation time
+  updatedAt       DateTime          @updatedAt             // Auto-updated on every change
+
+  @@map("applications") // The actual PostgreSQL table name
+}

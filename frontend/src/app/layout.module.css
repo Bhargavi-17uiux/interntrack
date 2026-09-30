@@ -1,0 +1,22 @@
+/* layout.module.css — App Shell Layout */
+
+.appLayout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--color-bg-primary);
+}
+
+.mainContent {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: margin-left var(--transition-slow);
+}
+
+/* On mobile, sidebar overlays instead of pushing content */
+@media (max-width: 768px) {
+  .mainContent {
+    margin-left: 0;
+  }
+}

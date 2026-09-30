@@ -1,0 +1,161 @@
+/* ApplicationTable.module.css */
+
+.tableWrapper {
+  overflow-x: auto;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.table thead {
+  background: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.table thead th {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+.row {
+  background: var(--color-bg-card);
+  border-bottom: 1px solid var(--color-border);
+  transition: background var(--transition-fast);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.row:hover {
+  background: var(--color-bg-card-hover);
+}
+
+.table td {
+  padding: var(--space-4);
+  vertical-align: middle;
+}
+
+/* Company cell with avatar */
+.companyCell {
+  min-width: 200px;
+}
+
+.companyLink {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  text-decoration: none;
+  color: inherit;
+}
+
+.companyAvatar {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-secondary));
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.companyName {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  transition: color var(--transition-fast);
+}
+
+.companyLink:hover .companyName {
+  color: var(--color-accent-primary);
+}
+
+.jobLink {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  display: block;
+  margin-top: 2px;
+}
+
+.jobLink:hover {
+  color: var(--color-text-link);
+}
+
+.roleText {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.locationText {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+}
+
+.dateText {
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  font-size: var(--font-size-xs);
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.actionBtn {
+  font-size: 1rem;
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.deleteBtn:hover {
+  background: var(--color-status-rejected-bg) !important;
+}
+
+/* ─── Empty State ────────────────────────────────────────────────────────────── */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-16) var(--space-8);
+  text-align: center;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  gap: var(--space-4);
+}
+
+.emptyIcon {
+  font-size: 3.5rem;
+  margin-bottom: var(--space-2);
+}
+
+.emptyTitle {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.emptyText {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  max-width: 350px;
+}
